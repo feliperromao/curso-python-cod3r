@@ -22,6 +22,7 @@ class Projeto:
     def procurar(self, descricao):
         return [tarefa for tarefa in self.tarefas if tarefa.descricao == descricao][0]
 
+
 class Tarefa:
     def __init__(self, descricao, vencimento=None):
         self.descricao = descricao
@@ -45,11 +46,24 @@ class Tarefa:
         return f'{self.descricao} ' + ' '.join(status)
 
 
+class TarefaRecorrente(Tarefa):
+    def __init__(self, descricao, vencimento, dias=7):
+        super().__init__(descricao, vencimento)
+        self.dias = dias
+
+    def concluir(self):
+        super().concluir()
+        novo_vencimento = datetime.now() + timedelta(days=self.dias)
+        return TarefaRecorrente(self.descricao, novo_vencimento, self.dias)
+
+
 def main():
     casa = Projeto('Tarefas de casa')
     casa.add('lavar louça', datetime.now() + timedelta(minutes=60))
     casa.add('lavar roupa', datetime.now() + timedelta(days=1))
     casa.add('lavar moto', datetime.now() + timedelta(days=3, minutes=10))
+    casa.tarefas.append(TarefaRecorrente('limpar casa', datetime.now(), 7))
+    casa.tarefas.append(casa.procurar('limpar casa').concluir())
 
     casa.procurar('lavar louça').concluir()
 
