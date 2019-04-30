@@ -40,3 +40,27 @@ class Cliente(Pessoa):
         for compra in self.compras:
             total += compra.valor
         return total
+
+def main():
+    comand = True
+    while comand:
+        print('O que você deseja fazer?')
+        print('1) Adicionar novo vendedor')
+        print('2) Adicionar novo cliente')
+        print('3) Fazer uma vende para um cliente')
+        print('0) Sair')
+
+        resposta = input('Informe uma das opções acima: ')
+
+        if resposta == '0':
+            comand = False
+        elif resposta == '1':
+            vendedor_nome = input('Informe o nome do vendedor: ')
+            vendedor_idade = input('Informe a idade do vendedor: ')
+            vendedor_salario = input('Informe o salário do vendedor: ')
+            vendedor = Vendedor(vendedor_nome, vendedor_idade, vendedor_salario)
+            print(vendedor)
+
+
+if __name__ == "__main__":
+    main()
