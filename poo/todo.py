@@ -12,9 +12,19 @@ class Projeto:
 
     def __str__(self):
         return f'{self.nome} ({ len(self.pendentes()) } tarefa(s) pendente(s))'
-    
-    def add(self, descricao, vencimento=None):
-        self.tarefas.append(Tarefa(descricao, vencimento))
+
+    def _add_tarefa(self, tarefa, **kwargs):
+        self.tarefas.append(tarefa)
+
+    def _add_nova_tarefa(self, descricao, **kwargs):
+        self.tarefas.append(Tarefa(descricao, kwargs.get('vencimento', None)))
+
+    def add(self, tarefa, vencimento=None, **kwargs):
+        # self.tarefas.append(Tarefa(descricao, vencimento))
+        funcao_escolhida = self._add_tarefa if isinstance(tarefa, Tarefa) \
+            else self._add_nova_tarefa
+        kwargs['vencimento'] = vencimento
+        funcao_escolhida(tarefa, **kwargs)
     
     def pendentes(self):
         return [tarefa for tarefa in self.tarefas if not tarefa.feito]
@@ -62,8 +72,8 @@ def main():
     casa.add('lavar louça', datetime.now() + timedelta(minutes=60))
     casa.add('lavar roupa', datetime.now() + timedelta(days=1))
     casa.add('lavar moto', datetime.now() + timedelta(days=3, minutes=10))
-    casa.tarefas.append(TarefaRecorrente('limpar casa', datetime.now(), 7))
-    casa.tarefas.append(casa.procurar('limpar casa').concluir())
+    casa.add(TarefaRecorrente('limpar casa', datetime.now(), 7))
+    casa.add(casa.procurar('limpar casa').concluir())
 
     casa.procurar('lavar louça').concluir()
 
