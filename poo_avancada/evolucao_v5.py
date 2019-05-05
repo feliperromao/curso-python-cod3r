@@ -1,6 +1,7 @@
 #!C:\Users\felipe\AppData\Local\Programs\Python\Python37-32\python
+from abc import ABCMeta, abstractproperty
 
-class Humano:
+class Humano(metaclass=ABCMeta):
     especie = 'Homo Sapiens'
 
     def __init__(self, nome):
@@ -11,9 +12,9 @@ class Humano:
     def idade(self):
         return self._idade
 
-    @property
+    @abstractproperty
     def inteligente(self):
-        raise NotImplementedError('Propriedade não implementada')
+        pass
 
 
     @idade.setter
@@ -53,6 +54,12 @@ class HomoSapiens(Humano):
 
 
 if __name__ == '__main__':
+    try:
+        anonimo = Humano('Fulano')
+        print(anonimo.inteligente)
+    except TypeError:
+        print('Classe abstrata')
+
     jose = HomoSapiens('José')
     jose.idade = 50
 
